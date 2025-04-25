@@ -1,6 +1,6 @@
 # Contact Scraper
 
-A powerful tool for scraping contact information such as emails and phone numbers from websites based on search queries.
+A powerful tool for scraping contact information such as emails and phone numbers from websites based on search queries .
 
 ## Overview
 

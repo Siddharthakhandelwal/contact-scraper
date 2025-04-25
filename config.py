@@ -1,5 +1,5 @@
 # config.py
-
+#
 SEARCH_KEYWORDS = [
     "Artificial Intelligence recruiter contact email",
     "Machine Learning hiring manager email",
