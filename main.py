@@ -1,5 +1,5 @@
+# main.py
 
-#
 import csv
 import os
 from config import SEARCH_KEYWORDS

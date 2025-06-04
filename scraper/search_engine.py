@@ -1,7 +1,7 @@
 # scraper/search_engine.py
 from googlesearch import search
 from config import SEARCH_KEYWORDS
-#
+
 def get_search_results(query, num_results=100):
     try:
         return list(search(query, num_results=num_results))
