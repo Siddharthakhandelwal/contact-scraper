@@ -1,60 +1,75 @@
-# config.py - Configuration settings for contact scraper
+# config.py
 
-# Email credentials
-SENDER_EMAIL = "your_email@example.com"  # Replace with your email
-SENDER_PASSWORD = "your_app_password"    # Replace with your app password
+SEARCH_KEYWORDS = [
+    # Real Estate Keywords
+    "Realtor contact email",
+    "Real Estate Agent contact info",
+    "Real Estate Broker email address",
+    "Real Estate Investor contact",
+    "Property Manager email",
+    "Real Estate Developer email",
+    "Mortgage Broker email contact",
+    "Loan Officer contact info",
+    "Mortgage Insurance Agent email",
+    "Title Agent email address",
+    "Real Estate Attorney contact",
+    "Appraiser email",
+    "Home Inspector contact email",
+    "Escrow Officer email",
+    "Commercial Real Estate Agent contact",
+    "Luxury Real Estate Agent email",
+    "Real Estate Photographer email",
+    "Airbnb Manager contact email",
+    "Real Estate Coach email address",
+    "Real Estate Mentor contact",
+    "Real Estate Syndicator email",
+    "Real Estate Influencer contact email",
 
-# Email sending settings
-DAILY_EMAIL_LIMIT = 450  # Max emails per day
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
+    # Mixed Niches Keywords
+    "Startup Founder contact email",
+    "Entrepreneur email contact",
+    "Business Coach email",
+    "Podcast Host contact",
+    "YouTuber business email",
+    "Content Creator email",
+    "Influencer business contact",
+    "Health Coach email",
+    "Fitness Trainer contact",
+    "Nutritionist email contact",
+    "Life Coach email",
+    "Public Speaker contact email",
+    "Author contact",
+    "Course Creator email",
+    "Digital Marketer email contact",
+    "Marketing Consultant contact",
+    "Personal Brand Strategist email",
+    "E-commerce Business Owner contact",
+    "Shopify Owner email",
+    "Angel Investor contact email",
+    "Venture Capitalist email",
 
-# Groq API settings
-GROQ_API_KEY = "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"  # Replace with your Groq API key
-GROQ_MODEL = "llama-3.1-8b-instant"  # Default model for email generation
-
-# Target people/domains and their search keywords
-DOMAIN_KEYWORDS = {
-    "real_estate": [
-        "Realtor", "Real Estate Agent", "Real Estate Broker", "Real Estate Investor",
-        "Property Manager", "Real Estate Developer", "Mortgage Broker", "Loan Officer",
-        "Mortgage Insurance Agent", "Title Agent", "Real Estate Attorney", "Home Inspector",
-        "Appraiser", "Escrow Officer", "Commercial Real Estate", "Luxury Real Estate",
-        "Real Estate Photographer", "Real Estate Videographer", "Airbnb Manager",
-        "Real Estate Coach", "Real Estate Mentor", "Real Estate Syndicator",
-        "Real Estate Influencer", "Short-Term Rental Manager"
-    ],
-    "mixed_niches": [
-        "Startup Founder", "Entrepreneur", "Business Coach", "Podcast Host",
-        "YouTuber", "Content Creator", "Influencer", "Health Coach", "Fitness Trainer",
-        "Nutritionist", "Life Coach", "Public Speaker", "Author", "Course Creator",
-        "Digital Marketer", "Marketing Consultant", "Consultant", "Personal Brand Strategist",
-        "E-commerce Business Owner", "Dropshipping Expert", "Shopify Store Owner",
-        "Angel Investor", "Venture Capitalist"
-    ],
-    "banking": [
-        "Private Banker", "Wealth Manager", "Financial Advisor", "Investment Banker",
-        "Loan Officer", "Credit Analyst", "Mortgage Broker", "Bank Branch Manager",
-        "Commercial Banker", "Retail Banker", "Fintech Founder", "Fintech Executive",
-        "Hedge Fund Manager", "Risk Management Consultant", "Insurance Agent",
-        "Treasury Analyst", "Corporate Finance Consultant", "Estate Planner",
-        "Tax Consultant", "Financial Planner", "CFA", "CPA", "Finance Coach"
-    ]
-}
-
-# Additional keywords for broader searches
-DEFAULT_KEYWORDS = [
-    "professional contact information",
-    "business email addresses",
-    "industry contacts",
-    "networking contacts"
+    # Banking and Finance Keywords
+    "Private Banker contact email",
+    "Wealth Manager email",
+    "Financial Advisor contact",
+    "Investment Banker email address",
+    "Loan Officer email contact",
+    "Credit Analyst contact",
+    "Mortgage Broker email",
+    "Bank Branch Manager email",
+    "Commercial Banker contact",
+    "Retail Banker email",
+    "Fintech Founder contact",
+    "Hedge Fund Manager email",
+    "Risk Management Consultant email",
+    "Insurance Agent email address",
+    "Treasury Analyst contact email",
+    "Corporate Finance Consultant email",
+    "Estate Planner contact email",
+    "Tax Consultant email",
+    "Financial Planner contact"
 ]
 
-def get_keywords_for_domain(domain):
-    """Get appropriate search keywords based on target category"""
-    # For this version, we'll return all keywords since we're targeting specific people types
-    # regardless of domain. Can be enhanced later for domain-specific filtering.
-    all_keywords = []
-    for category in DOMAIN_KEYWORDS.values():
-        all_keywords.extend(category)
-    return list(set(all_keywords))  # Remove duplicates
+HEADERS = {
+    "User-Agent": "Mozilla/5.0"
+}
