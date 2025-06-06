@@ -1,100 +1,129 @@
-# Contact Scraper
+# Contact Scraper & Outreach System
 
-A powerful tool for scraping contact information such as emails and phone numbers from websites based on search queries.
+An intelligent tool for finding and contacting professionals in real estate, banking, and mixed niches with AI-powered personalization.
 
 ## Overview
 
-This tool searches the web for specific keywords related to contacts (recruiters, professors, researchers, etc.), then extracts contact information including:
+This system:
+1. Discovers contacts by professional category (real estate, banking, mixed niches)
+2. Extracts professional information including:
+   - Names and titles
+   - Email addresses
+   - Phone numbers
+   - Source URLs
+3. Generates personalized emails using AI (Groq integration)
+4. Tracks outreach with daily limits (450/day default)
 
-- Names
-- Email addresses
-- Phone numbers
-- Job titles/roles
+## Key Features
 
-The data is saved in a structured CSV format, making it easy to import into contact management systems or email marketing tools.
+- 🏠 Real Estate Professionals: 24+ roles including Realtors, Investors, Mortgage Brokers
+- 💼 Banking/Finance: 23+ roles including Wealth Managers, Financial Advisors, Bankers
+- 🚀 Mixed Niches: 23+ roles including Entrepreneurs, Influencers, Coaches
+- 🤖 AI-Powered: Dynamic email generation using Groq API
+- 🔍 Smart Scraping: Context-aware contact extraction
+- ⏱️ Rate Limited: 450 emails/day default with configurable delays
+- 📊 Tracking: Detailed CSV logging of all outreach
+- 📎 Attachments: Support for file attachments (resumes, brochures)
 
-## Features
+## Installation & Setup
 
-- 🔍 Intelligent search based on configurable keywords
-- 📧 Email extraction with context-aware name and role detection
-- 📱 Phone number detection
-- 🔄 Duplicate prevention - won't add contacts that already exist in your CSV
-- 🧠 Smart parsing to associate names with the right contact information
-- 🔄 Append mode to keep building your contact database
-- 📨 Email sender to reach out to contacts with personalized messages and attachments
+### 1. Clone Repository
+```bash
+git clone [repository_url]
+cd contact-scraper
+```
 
-## Installation
+### 2. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-1. Clone this repository:
+### 3. Configuration
+Edit `config.py` with your details:
+```python
+# Email Configuration (Required)
+SENDER_EMAIL = "your_email@example.com"  # Your Gmail address
+SENDER_PASSWORD = "your_app_password"    # Gmail App Password
 
-   ```
-   git clone https://github.com/yourusername/contact-scraper.git
-   cd contact-scraper
-   ```
+# Groq API (Optional for AI emails)
+GROQ_API_KEY = "your_groq_api_key"       # Get from Groq console
+GROQ_MODEL = "mixtral-8x7b-32768"       # Default AI model
 
-2. Install the required dependencies:
-   ```
-   pip install -r requirement.txt
-   ```
+# Email Limits
+DAILY_EMAIL_LIMIT = 450                  # Max emails per day
+```
 
-## Usage
+### 4. First Run Setup
+```bash
+python main.py
+```
+This will create the data directory and contacts CSV file.
 
-### Contact Scraping
+## Usage Guide
 
-1. Customize the search keywords in `config.py` to target specific types of contacts:
+### Finding Contacts
+```bash
+python main.py
+```
+- Scrapes contacts based on configured target roles
+- Stores results in `data/contacts.csv`
+- Automatically avoids duplicates
 
-   ```python
-   SEARCH_KEYWORDS = [
-       "AI researcher email contact",
-       "Machine Learning recruiter email",
-       # Add your own keywords here
-   ]
-   ```
+### Sending Emails
+```bash
+python email_sender.py --attachment resume.pdf --delay 10
+```
+Options:
+- `--attachment`: File to attach (PDF recommended)
+- `--delay`: Seconds between emails (default: 5)
+- `--limit`: Max emails to send (default: daily limit)
+- `--test`: Preview emails without sending
 
-2. Run the main script:
+### Email Templates
+1. Create/edit `email_template.txt`:
+```
+Hi [Name],
 
-   ```
-   python main.py
-   ```
+I noticed your work as a [Role] and wanted to connect...
 
-3. Your contacts will be stored in `data/contacts.csv`
+Best regards,
+[Your Name]
+```
+2. Placeholders: `[Name]`, `[Role]` auto-filled
 
-### Email Sender
+### Monitoring Progress
+- Check `data/contacts.csv` for:
+  - `mail_sent` date (if email was sent)
+  - Source URLs
+  - Contact details
 
-The tool includes an email sender to contact the scraped leads with personalized messages:
+## Target Roles Configuration
+Edit `DOMAIN_KEYWORDS` in `config.py` to modify:
+- Real Estate: Realtors, Investors, Brokers (24 roles)
+- Banking: Wealth Managers, Advisors, Bankers (23 roles)  
+- Mixed Niches: Entrepreneurs, Coaches, Creators (23 roles)
 
-1. Create an email template or use the provided `email_template.txt`
+## Technical Details
 
-2. Run the email sender (with a resume or file attachment):
+### Search Process
+1. Uses Google search with professional role keywords
+2. Scrapes resulting pages for contact info
+3. Contextually extracts names and titles near emails
 
-   ```
-   python email_sender.py --attachment path/to/your/resume.pdf --subject "Your Subject Line"
-   ```
+### Email Generation
+```mermaid
+graph TD
+    A[Contact Info] --> B{Groq Available?}
+    B -->|Yes| C[Generate AI Email]
+    B -->|No| D[Use Template]
+    C --> E[Send Email]
+    D --> E
+```
 
-3. Additional options:
-
-   ```
-   python email_sender.py --help
-   ```
-
-   Key options:
-
-   - `--csv`: Path to the contacts CSV (default: data/contacts.csv)
-   - `--template`: Path to your email template file
-   - `--delay`: Delay between emails in seconds (default: 5)
-   - `--limit`: Limit the number of emails to send
-   - `--test`: Test mode to preview emails without sending
-
-4. **Important Note for Gmail Users**: You need to use an "App Password" instead of your regular password. [Learn how to create an App Password](https://support.google.com/accounts/answer/185833).
-
-## How It Works
-
-1. The tool searches the web using the Google search API based on your keywords
-2. It visits each search result URL and extracts page content
-3. Using pattern matching, it identifies emails, phone numbers, and contextual information
-4. It attempts to associate names and roles with each contact by analyzing surrounding text
-5. All new, unique contacts are saved to the CSV file
-6. The email sender can then use this CSV to send personalized outreach emails
+### Data Flow
+1. Contacts saved to CSV with metadata
+2. Email status updated after sending
+3. Daily counters prevent over-sending
 
 ## Project Structure
 
@@ -108,14 +137,29 @@ The tool includes an email sender to contact the scraped leads with personalized
   - `utils.py` - Helper functions
 - `data/` - Where extracted contacts are stored
 
-## Future Improvements
+## Troubleshooting
 
-- Add LinkedIn specific scraping
-- Enhance name detection algorithm
-- Add company detection
-- Support for export to different formats (JSON, Excel)
-- Web interface for managing contacts
-- Email tracking and analytics
+### Common Issues
+1. **Emails not sending**:
+   - Verify Gmail App Password is correct
+   - Check SMTP settings in config.py
+   - Try test mode: `python email_sender.py --test`
+
+2. **No contacts found**:
+   - Check internet connection
+   - Verify keywords in config.py
+   - Try reducing search delay in search_engine.py
+
+3. **AI emails not working**:
+   - Ensure Groq API key is valid
+   - Check Groq service status
+   - Fall back to template mode if needed
+
+## Roadmap
+- LinkedIn integration
+- Enhanced company detection  
+- Email open tracking
+- Dashboard for analytics
 
 ## Legal Notice
 

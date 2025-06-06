@@ -1,14 +1,8 @@
-#!/usr/bin/env python
-# test_email.py
-# Simple script to run the self-test email function
-
 import os
 import sys
+default_attachment = "resume.pdf"
 
-# Default PDF attachment
-default_attachment = "siddhartha_khandelwal.pdf"
-
-# Check if resume file exists
+# Check if attachment file exists
 if len(sys.argv) > 1:
     attachment = sys.argv[1]
     if not os.path.exists(attachment):
@@ -32,4 +26,4 @@ if attachment:
     command += f" --attachment {attachment}"
 
 print(f"\nRunning: {command}")
-os.system(command) 
+os.system(command)

@@ -1,0 +1,7 @@
+# Core dependencies
+requests==2.31.0
+beautifulsoup4==4.12.2
+google==3.0.0
+groq==0.3.0
+# Development dependencies (optional)
+python-dotenv==1.0.0
