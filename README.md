@@ -1,128 +1,112 @@
-# Contact Scraper
+ # Contact Scraper
 
-A powerful tool for scraping contact information such as emails and phone numbers from websites based on search queries.
-
-## Overview
-
-This tool searches the web for specific keywords related to contacts (recruiters, professors, researchers, etc.), then extracts contact information including:
-
-- Names
-- Email addresses
-- Phone numbers
-- Job titles/roles
-
-The data is saved in a structured CSV format, making it easy to import into contact management systems or email marketing tools.
+A Python-based tool for automatically scraping contact information from search results based on specified keywords. The tool extracts names, email addresses, phone numbers, and professional roles, saving them to a CSV file while avoiding duplicates.
 
 ## Features
 
-- 🔍 Intelligent search based on configurable keywords
-- 📧 Email extraction with context-aware name and role detection
+- 🔍 Automated Google search based on keywords
+- 📧 Email and contact information extraction
 - 📱 Phone number detection
-- 🔄 Duplicate prevention - won't add contacts that already exist in your CSV
-- 🧠 Smart parsing to associate names with the right contact information
-- 🔄 Append mode to keep building your contact database
-- 📨 Email sender to reach out to contacts with personalized messages and attachments
+- 📊 CSV export with deduplication
+- ✉️ Email sending capability
+- 🔄 Status tracking for contacts
+
+## Prerequisites
+
+- Python 3.7 or higher
+- pip (Python package installer)
 
 ## Installation
 
-1. Clone this repository:
-
-   ```
+1. Clone the repository:
+   ```bash
    git clone https://github.com/yourusername/contact-scraper.git
    cd contact-scraper
    ```
 
-2. Install the required dependencies:
-   ```
+2. Install required dependencies:
+   ```bash
    pip install -r requirement.txt
    ```
 
-## Usage
+## Configuration
 
-### Contact Scraping
-
-1. Customize the search keywords in `config.py` to target specific types of contacts:
-
+1. Create or modify `config.py` with your search keywords:
    ```python
    SEARCH_KEYWORDS = [
-       "AI researcher email contact",
-       "Machine Learning recruiter email",
-       # Add your own keywords here
+       "your search keyword 1",
+       "your search keyword 2"
    ]
    ```
 
-2. Run the main script:
-
+2. For email functionality, configure your email settings in `config.py`:
+   ```python
+   EMAIL_CONFIG = {
+       "smtp_server": "smtp.gmail.com",
+       "smtp_port": 587,
+       "username": "your-email@gmail.com",
+       "password": "your-app-specific-password"  # Use app-specific password for Gmail
+   }
    ```
-   python main.py
-   ```
-
-3. Your contacts will be stored in `data/contacts.csv`
-
-### Email Sender
-
-The tool includes an email sender to contact the scraped leads with personalized messages:
-
-1. Create an email template or use the provided `email_template.txt`
-
-2. Run the email sender (with a resume or file attachment):
-
-   ```
-   python email_sender.py --attachment path/to/your/resume.pdf --subject "Your Subject Line"
-   ```
-
-3. Additional options:
-
-   ```
-   python email_sender.py --help
-   ```
-
-   Key options:
-
-   - `--csv`: Path to the contacts CSV (default: data/contacts.csv)
-   - `--template`: Path to your email template file
-   - `--delay`: Delay between emails in seconds (default: 5)
-   - `--limit`: Limit the number of emails to send
-   - `--test`: Test mode to preview emails without sending
-
-4. **Important Note for Gmail Users**: You need to use an "App Password" instead of your regular password. [Learn how to create an App Password](https://support.google.com/accounts/answer/185833).
-
-## How It Works
-
-1. The tool searches the web using the Google search API based on your keywords
-2. It visits each search result URL and extracts page content
-3. Using pattern matching, it identifies emails, phone numbers, and contextual information
-4. It attempts to associate names and roles with each contact by analyzing surrounding text
-5. All new, unique contacts are saved to the CSV file
-6. The email sender can then use this CSV to send personalized outreach emails
 
 ## Project Structure
 
-- `main.py` - Main entry point for the application
-- `config.py` - Configuration settings including search keywords
-- `email_sender.py` - Tool for sending personalized emails to contacts
-- `email_template.txt` - Sample template for outreach emails
-- `scraper/`
-  - `search_engine.py` - Handles web searches
-  - `email_scraper.py` - Extracts contacts from web pages
-  - `utils.py` - Helper functions
-- `data/` - Where extracted contacts are stored
+```
+contact-scraper/
+├── data/               # Directory for storing scraped data
+├── scraper/           # Core scraping functionality
+├── config.py          # Configuration settings
+├── email_sender.py    # Email sending functionality
+├── main.py           # Main script
+├── test_email.py     # Email testing script
+└── requirement.txt   # Project dependencies
+```
 
-## Future Improvements
+## Usage
 
-- Add LinkedIn specific scraping
-- Enhance name detection algorithm
-- Add company detection
-- Support for export to different formats (JSON, Excel)
-- Web interface for managing contacts
-- Email tracking and analytics
+1. Run the main scraper:
+   ```bash
+   python main.py
+   ```
+   This will:
+   - Search for contacts based on keywords in `config.py`
+   - Extract contact information from search results
+   - Save unique contacts to `data/contacts.csv`
 
-## Legal Notice
 
-This tool is for educational purposes only. Always respect website terms of service and privacy policies when scraping content. Use responsibly and ethically.
 
-When sending emails, ensure you comply with anti-spam laws such as CAN-SPAM, GDPR, and CASL. Always provide an unsubscribe option and your physical address.
+## Output Format
+
+The scraped data is saved in `data/contacts.csv` with the following columns:
+- Name
+- Email
+- Phone
+- Title/Role
+- Source URL
+- Status
+
+## Important Notes
+
+1. Respect website terms of service and robots.txt when scraping
+2. Use appropriate delays between requests to avoid being blocked
+3. Keep your email credentials secure
+4. For Gmail, use App Passwords instead of your account password
+
+## Troubleshooting
+
+1. If you encounter SMTP authentication issues:
+   - For Gmail, enable 2-factor authentication and use an App Password
+   - Check your email server settings in config.py
+
+2. If scraping results are limited:
+   - Try adjusting your search keywords
+   - Check if you're being rate-limited
+   - Ensure you have a stable internet connection
+
+## Contributing
+
+Feel free to fork the repository and submit pull requests for any improvements.
 
 ## License
 
-MIT License
+This project is licensed under the MIT License - see the LICENSE file for details.
