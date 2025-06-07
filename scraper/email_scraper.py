@@ -1,8 +1,7 @@
-# email_scraper.py
-
 import requests
 import re
 import random
+import time
 from bs4 import BeautifulSoup
 
 # List of real browser user agents to bypass 403 errors
@@ -23,19 +22,47 @@ HEADERS_LIST = [
     },
 ]
 
-# Roles to look for near emails
-ROLES = ["Professor", "Researcher", "Recruiter", "Engineer", "Scientist", "Coordinator", "Lecturer", "Internship Coordinator", "Hiring Manager"]
+# Expanded roles to improve extraction accuracy
+ROLES = [
+    # Real Estate
+    "Realtor", "Real Estate Agent", "Real Estate Broker", "Real Estate Investor", "Property Manager",
+    "Real Estate Developer", "Mortgage Broker", "Loan Officer", "Mortgage Insurance Agent", "Title Agent",
+    "Real Estate Attorney", "Appraiser", "Home Inspector", "Escrow Officer", "Commercial Real Estate Agent",
+    "Luxury Real Estate Agent", "Real Estate Photographer", "Real Estate Videographer", "Real Estate Coach",
+    "Real Estate Mentor", "Real Estate Syndicator", "Short-Term Rental Manager", "Airbnb Manager",
+    "Real Estate Influencer",
 
-def extract_info_from_url(url):
-    headers = random.choice(HEADERS_LIST)
-    try:
-        response = requests.get(url, headers=headers, timeout=10)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, "html.parser")
-        text = soup.get_text(separator=' ')
-    except Exception as e:
-        print(f"❌ Error fetching {url}: {e}")
-        return []
+    # Mixed Niches
+    "Startup Founder", "Entrepreneur", "Business Coach", "Podcast Host", "YouTuber", "Content Creator",
+    "Influencer", "Health Coach", "Fitness Trainer", "Nutritionist", "Life Coach", "Public Speaker",
+    "Author", "Course Creator", "Digital Marketer", "Marketing Consultant", "Consultant",
+    "Personal Brand Strategist", "E-commerce Business Owner", "Dropshipping Expert", "Shopify Store Owner",
+    "Angel Investor", "Venture Capitalist",
+
+    # Banking & Finance
+    "Private Banker", "Wealth Manager", "Financial Advisor", "Investment Banker", "Credit Analyst",
+    "Bank Branch Manager", "Commercial Banker", "Retail Banker", "Fintech Founder", "Fintech Executive",
+    "Hedge Fund Manager", "Risk Management Consultant", "Insurance Agent", "Treasury Analyst",
+    "Corporate Finance Consultant", "Estate Planner", "Tax Consultant", "Financial Planner",
+    "CFA", "CPA", "Finance Coach"
+]
+
+
+def extract_info_from_url(url, retries=3, delay=2):
+    for attempt in range(retries):
+        headers = random.choice(HEADERS_LIST)
+        try:
+            response = requests.get(url, headers=headers, timeout=10)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.text, "html.parser")
+            text = soup.get_text(separator=' ')
+            break  # successful fetch
+        except Exception as e:
+            print(f"❌ Error fetching {url}: {e}")
+            if attempt < retries - 1:
+                time.sleep(delay)
+            else:
+                return []
 
     # Extract emails and phone numbers
     emails = list(set(re.findall(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+", text)))
@@ -63,4 +90,5 @@ def extract_info_from_url(url):
             "Source URL": url
         })
 
+    time.sleep(random.uniform(1.5, 3.5))  # polite delay between requests
     return people_info
